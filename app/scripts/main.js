@@ -36,13 +36,13 @@ function CircleMarker(map, lat, lng, distance) {
 
   this.set('distance', distance);
   this.bindTo('bounds', circle);
-  this.center_changed();
+  this.position_changed();
 }
 CircleMarker.prototype = new google.maps.MVCObject();
 CircleMarker.prototype.distance_changed = function () {
   this.set('radius', this.get('distance') * 1000);
 };
-CircleMarker.prototype.center_changed = function () {
+CircleMarker.prototype.position_changed = function () {
   var bounds = this.get('bounds');
   if (bounds) {
     var lng = bounds.getNorthEast().lng();
@@ -94,6 +94,6 @@ App.Map.init = function () {
   });
   google.maps.event.addListener(App.Map.marker, 'position_changed', function () {
     console.log('position_changed');
-    console.log(this.radius)
+    console.log(this.position)
   });
 };
