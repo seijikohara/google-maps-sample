@@ -2,12 +2,14 @@ function CircleMarker(map, lat, lng, distance) {
   this.set('map', map);
   this.set('position', new google.maps.LatLng(lat, lng));
 
+  // Center marker
   var marker = new google.maps.Marker({
     draggable: true
   });
   marker.bindTo('map', this);
   marker.bindTo('position', this);
 
+  // Center circle
   var circle = new google.maps.Circle({
     fillColor: '#efefef',
     fillOpacity: 0.5,
@@ -19,6 +21,7 @@ function CircleMarker(map, lat, lng, distance) {
   circle.bindTo('map', this);
   circle.bindTo('radius', this);
 
+  // Resize marker
   var sizer = new google.maps.Marker({
     draggable: true,
     icon: {
@@ -50,23 +53,10 @@ CircleMarker.prototype.position_changed = function () {
     this.set('sizer_position', position);
   }
 };
-CircleMarker.prototype.distanceBetweenPoints_ = function (p1, p2) {
-  if (!p1 || !p2) {
-    return 0;
-  }
-  var R = 6371;
-  var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
-  var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c;
-  return d;
-};
 CircleMarker.prototype.setDistance = function () {
   var pos = this.get('sizer_position');
   var center = this.get('position');
-  var distance = this.distanceBetweenPoints_(center, pos);
-  distance = Math.round(distance * 100) / 100;
+  var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, center) / 1000;
   this.set('distance', distance);
 };
 
