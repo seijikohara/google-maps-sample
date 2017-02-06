@@ -34,17 +34,17 @@ function CircleMarker(map, lat, lng, distance) {
   sizer.bindTo('position', this, 'sizer_position');
   var me = this;
   google.maps.event.addListener(sizer, 'drag', function () {
-    me.setDistance();
+    var sizerPosition = me.get('sizer_position');
+    var center = me.get('position');
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(sizerPosition, center);
+    me.set('radius', distance);
   });
 
-  this.set('distance', distance);
+  this.set('radius', 50000);
   this.bindTo('bounds', circle);
   this.position_changed();
 }
 CircleMarker.prototype = new google.maps.MVCObject();
-CircleMarker.prototype.distance_changed = function () {
-  this.set('radius', this.get('distance') * 1000);
-};
 CircleMarker.prototype.position_changed = function () {
   var bounds = this.get('bounds');
   if (bounds) {
@@ -52,12 +52,6 @@ CircleMarker.prototype.position_changed = function () {
     var position = new google.maps.LatLng(this.get('position').lat(), lng);
     this.set('sizer_position', position);
   }
-};
-CircleMarker.prototype.setDistance = function () {
-  var pos = this.get('sizer_position');
-  var center = this.get('position');
-  var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, center) / 1000;
-  this.set('distance', distance);
 };
 
 
