@@ -25,9 +25,12 @@ function CircleMarker(map, lat, lng, distance) {
   var sizer = new google.maps.Marker({
     draggable: true,
     icon: {
-      url: 'https://maps.gstatic.com/intl/en_us/mapfiles/markers2/measle_blue.png',
-      size: new google.maps.Size(10, 10),
-      anchor: new google.maps.Point(5, 5)
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 5,
+      strokeWeight: 2,
+      fillColor: 'white',
+      strokeColor: 'gray',
+      fillOpacity: 1
     },
   });
   sizer.bindTo('map', this);
